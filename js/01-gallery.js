@@ -1,6 +1,7 @@
 import { galleryItems } from './gallery-items.js';
 
 const galleryList = document.querySelector('.gallery');
+let isLightboxOpen = false;
 
 function createGalleryItem(item) {
     const li = document.createElement('li');
@@ -22,9 +23,9 @@ function createGalleryItem(item) {
     return li;
 }
 
-galleryItems.forEach(item => {
-    galleryList.appendChild(createGalleryItem(item));
-});
+const galleryItem = galleryItems.map(item => createGalleryItem(item));
+
+galleryList.append(...galleryItem);
 
 galleryList.addEventListener('click', (e) => {
     e.preventDefault();
@@ -33,16 +34,17 @@ galleryList.addEventListener('click', (e) => {
         const description = e.target.alt;
 
         const lightbox = basicLightbox.create(
-            `<img src="${source}" alt="${description}" />`
-        );
-
-        lightbox.show();
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                lightbox.close();
+            `<img src="${source}" alt="${description}" />`, 
+            {
+            onShow: (lightbox) => {
+        isLightboxOpen = true;
+            },
+            onClose: (lightbox) => {
+        isLightboxOpen = false;
             }
-        });
-    }
-});
+        }
+    );
 
+    lightbox.show();
+}
+});

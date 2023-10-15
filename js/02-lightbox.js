@@ -19,9 +19,11 @@ function createGalleryItem(item) {
 
     return li;
 }
-galleryItems.forEach(item => {
-    galleryList.appendChild(createGalleryItem(item));
-});
+
+const galleryItem = galleryItems.map(item => createGalleryItem(item));
+
+galleryList.append(...galleryItem);
+
 
 const lightbox = new SimpleLightbox('.gallery__item a', {
     captionsData: 'alt',
@@ -29,12 +31,4 @@ const lightbox = new SimpleLightbox('.gallery__item a', {
     captionDelay: 250,
     disableScroll: false,
     history: false,
-});
-
-document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowLeft') {
-        lightbox.prev();
-    } else if (e.key === 'ArrowRight') {
-        lightbox.next();
-    }
 });
